@@ -9,9 +9,11 @@ namespace SuperHeroes.Controllers
 {
     public class HeroController : Controller
     {
+        ApplicationDbContext db = new ApplicationDbContext();
         // GET: Hero
         public ActionResult Index()
         {
+            
             return View();
         }
 
@@ -23,19 +25,20 @@ namespace SuperHeroes.Controllers
 
         // GET: Hero/Create
         public ActionResult Create()
-        {
+        {            
             return View();
         }
 
         // POST: Hero/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(SuperHero superHero)
         {
             try
             {
                 // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                db.SuperHeroes.Add(superHero);
+                db.SaveChanges();
+                return RedirectToAction("Create");
             }
             catch
             {

@@ -15,14 +15,14 @@ namespace SuperHeroes.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "SuperHeroes! All About SuperHeroes!";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "We don't have contact info... if necessary, we will contact you.";
 
             return View();
         }
