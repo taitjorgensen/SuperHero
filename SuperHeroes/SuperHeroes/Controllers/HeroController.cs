@@ -13,14 +13,17 @@ namespace SuperHeroes.Controllers
         // GET: Hero
         public ActionResult Index()
         {
-            
-            return View();
+            List<SuperHero> superHeroes = new List<SuperHero>();
+            superHeroes = db.SuperHeroes.ToList();
+            return View(superHeroes);
         }
 
         // GET: Hero/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            SuperHero superHero = new SuperHero();
+            superHero = db.SuperHeroes.Where(s => s.Id == id).Single();
+            return View(superHero);
         }
 
         // GET: Hero/Create
@@ -31,57 +34,68 @@ namespace SuperHeroes.Controllers
 
         // POST: Hero/Create
         [HttpPost]
-        public ActionResult Create(SuperHero superHero)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "ID,SuperHeroName,AlterEgo,PrimaryAbility,SecondaryAbility,CatchPhrase")] SuperHero superHero)
         {
-            try
+            if (ModelState.IsValid)
             {
                 // TODO: Add insert logic here
                 db.SuperHeroes.Add(superHero);
                 db.SaveChanges();
-                return RedirectToAction("Create");
+                return RedirectToAction("Index");
             }
-            catch
+            else
             {
-                return View();
+                return View("Index");
             }
         }
 
         // GET: Hero/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            SuperHero superHero = db.SuperHeroes.Where(s => s.Id == id).Single();
+            return View(superHero);
         }
 
         // POST: Hero/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "ID,SuperHeroName,AlterEgo,PrimaryAbility,SecondaryAbility,CatchPhrase")] SuperHero superHero)
         {
             try
-            {
-                // TODO: Add update logic here
-
+            {                               
+                SuperHero editedSuperHero = db.SuperHeroes.Where(s => s.Id == superHero.Id).Single();
+                editedSuperHero.SuperHeroName = superHero.SuperHeroName;
+                editedSuperHero.AlterEgo = superHero.AlterEgo;
+                editedSuperHero.PrimaryAbility = superHero.PrimaryAbility;
+                editedSuperHero.SecondaryAbility = superHero.SecondaryAbility;
+                editedSuperHero.CatchPhrase = superHero.CatchPhrase;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch
             {
                 return View();
-            }
+            }            
         }
 
         // GET: Hero/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            SuperHero superHero = db.SuperHeroes.Where(s => s.Id == id).Single();
+            return View(superHero);
         }
 
         // POST: Hero/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, SuperHero superHero)
         {
             try
             {
                 // TODO: Add delete logic here
-
+                superHero = db.SuperHeroes.Where(s => s.Id == superHero.Id).Single();
+                db.SuperHeroes.Remove(superHero);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch
